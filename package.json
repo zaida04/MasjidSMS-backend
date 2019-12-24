@@ -1,0 +1,22 @@
+{
+  "name": "masjid-an-noor-api",
+  "version": "1.0.0",
+  "description": "Summary: **API returns data in JSON and works with a token system for differentiating admin and regular user accounts.**",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zaida04/Masjid-AnNoor-Timing-API.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zaida04/Masjid-AnNoor-Timing-API/issues"
+  },
+  "homepage": "https://github.com/zaida04/Masjid-AnNoor-Timing-API#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
