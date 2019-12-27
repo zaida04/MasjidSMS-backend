@@ -10,9 +10,9 @@ var { User } = require('../../Models/User.js');
 module.exports.signup = async (database, ip, pnumber, email, { firstname, lastname }, token, id) => {
     //return new user
     database.serialize(() => {
-        database.run('CREATE TABLE IF NOT EXISTS users(email TEXT, firstname TEXT, lastname TEXT, pnumber TEXT, originip varchar(15), token TEXT, id TEXT)')
-            .run('INSERT INTO users(email, firstname, lastname, pnumber, originip, token, id) VALUES(?, ?, ?, ?, ?, ?, ?)', [email, firstname, lastname, pnumber, ip, token, id])
+        database.run('CREATE TABLE IF NOT EXISTS users(email TEXT, firstname TEXT, lastname TEXT, pnumber TEXT, originip varchar(15), token TEXT, id TEXT, permissions TEXT)')
+            .run('INSERT INTO users(email, firstname, lastname, pnumber, originip, token, id, permissions) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', [email, firstname, lastname, pnumber, ip, token, id, "CREATE_ADMIN"])
     });
-    return new User(firstname, lastname, email, ip, pnumber, token, id);
+    return new User(firstname, lastname, email, ip, pnumber, token, id, "CREATE_ADMIN");
 } 
 

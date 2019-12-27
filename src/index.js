@@ -15,7 +15,7 @@ app.use(function (err, req, res, next) {
     if (err) {
         if(err.status) res.status(err.status)
         res.json({
-            "status": err.status || 500,
+            "status": err.status || 400,
             "code": err.code,
             "url": req.originalUrl,
             "error": {
@@ -28,8 +28,6 @@ app.use(function (err, req, res, next) {
         })
     }
 });
-//Requests
-
 
 //404 handler
 app.use((req, res, next) => {

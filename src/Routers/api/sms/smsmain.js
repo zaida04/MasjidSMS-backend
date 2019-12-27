@@ -1,10 +1,7 @@
 var { Router } = require('express'); //grab the router class from express
-var { User } = require('../../Models/User.js'); //Model of a user
 var smsapi = Router({ mergeParams: true }); //Router
 
-smsapi.get('/index', (req, res) => {
-    res.json({ "response": "All Good " });
-    return;
-});
+var smslist = require('./smslist.js');
+smsapi.use('/smslist', smslist); //sms router
 
 module.exports = smsapi; //export the router
