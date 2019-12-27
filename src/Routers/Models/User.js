@@ -1,14 +1,22 @@
 class User {
-    constructor(firstname, lastname, email, ip, pnumber) {
+    constructor(firstname, lastname, email, ip, pnumber, token, id) {
         this.firstname = firstname;
         this.lastname = lastname;
         this._ip = ip;
         this._email = email;
         this._pnumber = pnumber;
+        this._token = token;
+        this._id = id;
     }
     //@returns [string] Returns name
     get name() {
         return { firstname: this.firstname, lastname: this.lastname };
+    }
+    get token() {
+        return this._token;
+    }
+    get id() {
+        return this._id;
     }
     //@returns [string] Returns IP
     get ip() {
@@ -28,6 +36,20 @@ class User {
     set phonenumber(x) {
         this._pnumber = x;
         return this;
+    }
+    toString() {
+        return {
+            "User": {
+                "firstname": this.firstname,
+                "lastname": this.lastname,
+                "email": this._email,
+                "phone_number": this._pnumber,
+                "token": this._token,
+                "id": this._id,
+                "initial_ip": this._ip
+            },
+            "timestamp": new Date()
+        }
     }
 }
 

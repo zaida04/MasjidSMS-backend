@@ -7,7 +7,7 @@ var { User } = require('../../Models/User.js');
  * @param [object, string, string] Name, firstname, lastname The Firstname and Lastname of the user updating
  * @return [user]
  */
-module.exports.updateMailList = (user) => {
+module.exports.updateuser = async (user) => {
     return new User(firstname, lastname, email, ip, pnumber);
 }
 

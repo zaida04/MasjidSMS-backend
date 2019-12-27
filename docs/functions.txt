@@ -1,0 +1,21 @@
+retrieveuser:
+	params:
+		database - sqlite3 database object - interact with database,
+		firstname - string - firstname of user
+		lastname - string - lastname of user
+		email - string - email of user
+		pnumber - string - phone number of user
+	Returns: a user object 
+signup:
+	params:
+		database - sqlite3 database object - interact with database
+		ip - string - ip address of user
+		pnumber - string - phone number of user
+		email - string - email of user
+		{ 
+			firstname - string - firstname of user
+			lastname - string - lastname of user
+		}
+		token - string - used to authenticate user
+	returns: a user object
+update:
