@@ -66,6 +66,27 @@ class User {
         this._lastname = x;
         return this;
     }
+    isSuperAdmin() {
+        if (this._permissions.includes("SUPERADMIN")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    isAdmin() {
+        if (this._permissions.includes("ADMIN") || this._permissions.includes("SUPERADMIN")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    isMod() {
+        if (this._permissions.includes("ADMIN") || this._permissions.includes("SUPERADMIN") || this._permissions.includes("MANAGER")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     /*
      * @params [string] x email of user 
      * @return {User}

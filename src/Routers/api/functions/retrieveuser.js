@@ -6,9 +6,9 @@ var { User } = require('../../Models/User.js');
  * @param [object, string, string] Name, firstname, lastname The Firstname and Lastname of the user signing up
  * @return [user]
  */
-module.exports.retrieveuser = async (database, id) => {
+module.exports.retrieveuser = async (database, id, token) => {
     return new Promise((resolve, reject) => {
-        database.get('SELECT * FROM users WHERE id=?', id, (err, row) => {
+        database.get('SELECT * FROM users WHERE id=? OR token=?', [id, token], (err, row) => {
             if (err) {
                 reject(new Error(err));
             }

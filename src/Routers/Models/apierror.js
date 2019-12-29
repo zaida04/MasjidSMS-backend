@@ -2,7 +2,7 @@
 //ex. new User(errors.array()[0.msg, 500, errors.array()[0].param, errors.array()[0].value)
 class APIError extends Error {
     constructor(msg, status, field, value) {
-        super(`There is an error with the field: ${field}, with the error: ${msg}, and the bad value:${value}`);
+        super(`There is an error with the field: ${field}, with the error: ${msg}, and the bad value: ${value}`);
         this._status = status || 500; //status code
         this._msg = msg;
         this._field = field; //the field where the bad value is

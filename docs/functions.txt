@@ -1,10 +1,7 @@
 retrieveuser:
 	params:
 		database - sqlite3 database object - interact with database,
-		firstname - string - firstname of user
-		lastname - string - lastname of user
-		email - string - email of user
-		pnumber - string - phone number of user
+		id - 
 	Returns: a user object 
 signup:
 	params:
