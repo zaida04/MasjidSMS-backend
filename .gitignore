@@ -2,3 +2,5 @@ node_modules/
 .vs/
 user.db
 *.db
+twilio_credentials.json
+data/

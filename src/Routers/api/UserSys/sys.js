@@ -56,7 +56,7 @@ sys.post('/createMod', (req, res, next) => {
  */
 sys.get('/:id', check('token').notEmpty(), (req, res, next) => {
     apicatcher(validationResult, req);
-    var db = opendb();
+    var db = opendb("user");
     retrieveuser(db, req.params.id).then(u => {
         if (u.token !== req.body.token) throw new Error("Credentials Invalid")
         res.json(u.toString())
