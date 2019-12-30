@@ -1,4 +1,4 @@
-var { User } = require('../../Models/User.js');
+var { User } = require('../../../Models/User.js');
 
 /*
  * update info function to the maillist database

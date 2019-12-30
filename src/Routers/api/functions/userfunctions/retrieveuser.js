@@ -1,4 +1,4 @@
-var { User } = require('../../Models/User.js');
+var { User } = require('../../../Models/User.js');
 
 /*
  * retrieve a user from the maillist database

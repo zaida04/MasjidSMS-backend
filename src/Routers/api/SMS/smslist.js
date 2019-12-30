@@ -3,8 +3,10 @@ var { Router } = require('express'); //grab the router class from express
 var smslist = Router({ mergeParams: true }); //Router
 var { opendb } = require('../functions/opendb.js');
 var { apicatcher } = require('../functions/apierrorcatcher.js');
-var { retrieveuser } = require('../functions/retrieveuser.js');
+var { retrieveuser } = require('../functions/userfunctions/retrieveuser.js');
 var twilio = require('twilio');
+var accountSid = 'AC323dabc9bdd9c14b457a32a4d1e6313c'; // Your Account SID from www.twilio.com/console
+var authToken = 'your_auth_token';  
 
 smslist.post('/test', (req, res) => {
     var db = opendb("smslists");

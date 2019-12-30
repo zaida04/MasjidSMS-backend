@@ -1,4 +1,4 @@
-var { User } = require('../../Models/User.js');
+var { User } = require('../../../Models/User.js');
 var { retrieveuser } = require('./retrieveuser.js');
 /*
  * Create Admin 
@@ -13,5 +13,5 @@ module.exports.createAdmin = async (database, ip, pnumber, email, { firstname, l
         database.run('CREATE TABLE IF NOT EXISTS users(email TEXT, firstname TEXT, lastname TEXT, pnumber TEXT, originip varchar(15), token TEXT, id TEXT, permissions TEXT)')
             .run('INSERT INTO users(email, firstname, lastname, pnumber, originip, token, id, permissions) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', [email, firstname, lastname, pnumber, ip, token, id, "ADMIN, SUPERADMIN, MANAGER"])
     });
-    return new User(firstname, lastname, email, ip, pnumber, token, id, "MANAGER");
+    return new User(firstname, lastname, email, ip, pnumber, token, id, "ADMIN, MANAGER");
 } 
