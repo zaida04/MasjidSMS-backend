@@ -19,8 +19,23 @@ sys.post('/test', (req, res) => {
             "result": row
         })
     })
-})
-sys.post('/createAdmin', (req, res, next) => {
+});
+
+/**
+ * @api {post} /api/users/createAdmin
+ * @apiName Create Admin
+ * @apiGroup User
+ *
+ * @apiParam {string} email The users email
+ * @apiParam {string} firstname The users firstname
+ * @apiParam {string} lastname The users lastname
+ * @apiParam {string} pnumber The users phone number
+ * @apiParam {string} token The token of the executor of the request
+ *
+ * @apiSuccess {json} user The user that is created
+ */
+sys.post('/createAdmin', [check('email').notEmpty().isEmail().normalizeEmail(), check('firstname').notEmpty().isLength({ min: 3 }).trim().escape().isString(), check('lastname').notEmpty().isString().isLength({ min: 3 }).trim().escape(), check('pnumber').notEmpty().isString(), check('token').notEmpty().isString()],(req, res, next) => {
+    apicatcher(validationResult, req);
     var db = opendb("user");
     retrieveuser(db, null, req.body.token).then(u => {
         if (u.isSuperAdmin()) {
@@ -35,7 +50,21 @@ sys.post('/createAdmin', (req, res, next) => {
         }
     }).catch(e => {next(e)})
 });
-sys.post('/createMod', (req, res, next) => {
+
+/**
+ * @api {post} /api/users/createMod
+ * @apiName Create Mod
+ * @apiGroup User
+ *
+ * @apiParam {string} email The users email
+ * @apiParam {string} firstname The users firstname
+ * @apiParam {string} lastname The users lastname
+ * @apiParam {string} pnumber The users phone number
+ * @apiParam {string} token The token of the executor of the request
+ *
+ * @apiSuccess {json} user The user that is created
+ */
+sys.post('/createMod', [check('email').notEmpty().isEmail().normalizeEmail(), check('firstname').notEmpty().isLength({ min: 3 }).trim().escape().isString(), check('lastname').notEmpty().isString().isLength({ min: 3 }).trim().escape(), check('pnumber').notEmpty().isString(), check('token').notEmpty().isString()], (req, res, next) => {
     var db = opendb("user");
     retrieveuser(db, null, req.body.token).then(u => {
         if (u.isAdmin()) {
@@ -50,9 +79,16 @@ sys.post('/createMod', (req, res, next) => {
         }
     }).catch(e => { next(e) })
 })
-/*
- * Retrieve a user from the database
- * @returns {User}
+
+/**
+ * @api {get} /api/users/:id
+ * @apiName Retrieve User
+ * @apiGroup User
+ *
+ * @apiParam {int} id The users ID to retrieve
+ * @apiParam {string} token The token of the executor of the request
+ *
+ * @apiSuccess {User} user The user that is retrieved
  */
 sys.get('/:id', check('token').notEmpty(), (req, res, next) => {
     apicatcher(validationResult, req);
@@ -67,9 +103,17 @@ sys.get('/:id', check('token').notEmpty(), (req, res, next) => {
     db.close();
 })
 
-/*
- * Signup url. Takes a email, phone number, name (firstname and lastname) and takes the ip and generates its own token
- * @return {User}
+/**
+ * @api {post} /api/users/signup
+ * @apiName Create User
+ * @apiGroup User
+ *
+ * @apiParam {string} email The users email
+ * @apiParam {string} firstname The users firstname
+ * @apiParam {string} lastname The users lastname
+ * @apiParam {string} pnumber The users phone number
+ *
+ * @apiSuccess {json} user The user that is created
  */
 sys.post('/signup', [check('email').notEmpty().isEmail().normalizeEmail(), check('firstname').notEmpty().isLength({ min: 3 }).trim().escape().isString(), check('lastname').notEmpty().isString().isLength({ min: 3 }).trim().escape(), check('pnumber').notEmpty().isString()], (req, res, next) => {
     if (!(req.body.email && req.body.pnumber && req.body.firstname && req.body.lastname)) throw new APIError("You are missing one or more fields", 400, "body", null);
@@ -91,11 +135,21 @@ sys.post('/signup', [check('email').notEmpty().isEmail().normalizeEmail(), check
     db.close(); //close the database
 });
 
-/*
- * Update user 
- * @returns {User}
+/**
+ * @api {post} /api/users/:id/update
+ * @apiName Update User
+ * @apiGroup User
+ *
+ * @apiParam {string} email The users email
+ * @apiParam {string} firstname The users firstname
+ * @apiParam {int} id The users ID
+ * @apiParam {string} lastname The users lastname
+ * @apiParam {string} pnumber The users phone number
+ * @apiParam {string} token The token of the executor of the request
+ *
+ * @apiSuccess {json} user The user that is updated with the new Data
  */
-sys.post('/users/:id/update', [check('email').notEmpty().isEmail().normalizeEmail(), check('firstname').notEmpty().isLength({ min: 3 }).trim().escape().isString(), check('lastname').notEmpty().isString().isLength({ min: 3 }).trim().escape(), check('pnumber').notEmpty().isString()], (req, res, next) => {
+sys.post('/:id/update', [check('email').notEmpty().isEmail().normalizeEmail(), check('firstname').notEmpty().isLength({ min: 3 }).trim().escape().isString(), check('lastname').notEmpty().isString().isLength({ min: 3 }).trim().escape(), check('pnumber').notEmpty().isString(), check('token').notEmpty().isString()], (req, res, next) => {
     if (!(req.body.firstname || req.body.lastname || req.body.email || req.body.pnumber)) {
         throw new Error("...You don't seem to be changing anything?")
     }

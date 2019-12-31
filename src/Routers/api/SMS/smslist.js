@@ -4,8 +4,8 @@ var smslist = Router({ mergeParams: true }); //Router
 var { opendb } = require('../functions/opendb.js');
 var { apicatcher } = require('../functions/apierrorcatcher.js');
 var { retrieveuser } = require('../functions/userfunctions/retrieveuser.js');
-const { accountSid, twilio_token } = require('../../../twilio_credentials.json')
-var client = require('twilio')(accountSid, twilio_token);
+const { numberreal, numbertrial, accountSidtrial, twilio_tokentrial, accountSidreal, twilio_tokenreal } = require('../../../twilio_credentials.json')
+var client = require('twilio')(accountSidreal, twilio_tokenreal);
 
 smslist.post('/test', (req, res) => {
     var db = opendb("smslists");
@@ -16,6 +16,17 @@ smslist.post('/test', (req, res) => {
     })
 });
 
+/**
+ * @api {post} /api/sms/smslist/:name/sendText
+ * @apiName Send a text to a maillist
+ * @apiGroup SMSlist
+ *
+ * @apiParam {string} name The name of the SMSList to send the message to
+ * @apiParam {string} message The body of the text to send
+ * @apiParam {string} token Used to authenticate the user sending has perms to do this
+ * 
+ * @apiSuccess {json} response The response from the server
+ */
 smslist.post('/:name/sendText', [check("message").notEmpty(), check('token').notEmpty()], (req, res, next) => {
     apicatcher(validationResult, req);
     var dbuser = opendb('user');
@@ -31,13 +42,14 @@ smslist.post('/:name/sendText', [check("message").notEmpty(), check('token').not
                             next(new Error("There are no users within that SMSList"));
                         } else {
                             row1.forEach(r => {
+                                console.log(r.pnumber)
                                 client.messages
                                     .create({
                                         body: req.body.message,
-                                        from: '+17162193293',
-                                        to: '+17166048061'
-
+                                        from: numberreal,
+                                        to: '+1'+r.pnumber
                                     })
+                                    .then(message => console.log(message))
                                     .catch(e => res.json({ "result": "There was an error sending to the SMSList. Please contact an Admin"}));
                             })
                             res.json({ "result": "Successfully sent!"} )
@@ -51,7 +63,17 @@ smslist.post('/:name/sendText', [check("message").notEmpty(), check('token').not
     }).catch(e => { next(e) })
 });
 
-smslist.post('/create', [check('tablename').notEmpty(), check('')], (req, res, next) => {
+/**
+ * @api {post} /api/sms/smslist/create
+ * @apiName Send a text to a maillist
+ * @apiGroup SMSlist
+ *
+ * @apiParam {string} tablename The name for the smslist to be created
+ * @apiParam {string} token Used to authenticate the user sending has perms to do this
+ *
+ * @apiSuccess {json} response A response
+ */
+smslist.post('/create', [check('tablename').notEmpty(), check('token').notEmpty().isString()], (req, res, next) => {
     apicatcher(validationResult, req);
     var db = opendb("smslists");
     var dbuser = opendb("user");
@@ -81,6 +103,17 @@ smslist.post('/create', [check('tablename').notEmpty(), check('')], (req, res, n
     })
 
 });
+
+/**
+ * @api {post} /api/sms/smslist/:name/add
+ * @apiName Add a user to the Maillist
+ * @apiGroup SMSlist
+ *
+ * @apiParam {string} name The SMSlist name to add
+ * @apiParam {string} id Used to search up the person
+ *
+ * @apiSuccess {json} user The user that is created
+ */
 smslist.post('/:name/add', [check('id').notEmpty().isNumeric()], (req, res, next) => {
     apicatcher(validationResult, req);
     var dbusers = opendb("user");
