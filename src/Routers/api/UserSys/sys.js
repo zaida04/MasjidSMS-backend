@@ -21,8 +21,43 @@ sys.post('/test', (req, res) => {
     })
 });
 
+
+/**
+ * @api {post} /api/users/signup
+ * @apiVersion 1.0.0
+ * @apiName Create User
+ * @apiGroup User
+ *
+ * @apiParam {string} email The users email
+ * @apiParam {string} firstname The users firstname
+ * @apiParam {string} lastname The users lastname
+ * @apiParam {string} pnumber The users phone number
+ *
+ * @apiSuccess (Success 201) {json} user The user that is created
+ */
+sys.post('/signup', [check('email').notEmpty().isEmail().normalizeEmail(), check('firstname').notEmpty().isLength({ min: 3 }).trim().escape().isString(), check('lastname').notEmpty().isString().isLength({ min: 3 }).trim().escape(), check('pnumber').notEmpty().isString()], (req, res, next) => {
+    if (!(req.body.email && req.body.pnumber && req.body.firstname && req.body.lastname)) throw new APIError("You are missing one or more fields", 400, "body", null);
+    //get the validation result and see if it passed the tests
+    isPN(req.body.pnumber);//check if phone number is all gucci
+    apicatcher(validationResult, req)
+    var tokgen = uidgen.generateSync(); //generate a token for the user
+    var id = Math.floor(Math.random() * 1000000 + 1);
+    var db = opendb("user");
+    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress; //the ip of the user
+    try {
+        signup(db, ip, req.body.pnumber, req.body.email, { firstname: req.body.firstname, lastname: req.body.lastname }, tokgen, id).then(u => { //send to the signup function
+            res.json({ "status": 201, u.toString() }) //return the newly created user object
+        });
+        return; //end the function
+    } catch (e) {
+        next(e);
+    }
+    db.close(); //close the database
+});
+
 /**
  * @api {post} /api/users/createAdmin
+ * @apiVersion 1.0.0
  * @apiName Create Admin
  * @apiGroup User
  *
@@ -32,7 +67,7 @@ sys.post('/test', (req, res) => {
  * @apiParam {string} pnumber The users phone number
  * @apiParam {string} token The token of the executor of the request
  *
- * @apiSuccess {json} user The user that is created
+ * @apiSuccess (Success 201) {json} user The user that is created
  */
 sys.post('/createAdmin', [check('email').notEmpty().isEmail().normalizeEmail(), check('firstname').notEmpty().isLength({ min: 3 }).trim().escape().isString(), check('lastname').notEmpty().isString().isLength({ min: 3 }).trim().escape(), check('pnumber').notEmpty().isString(), check('token').notEmpty().isString()],(req, res, next) => {
     apicatcher(validationResult, req);
@@ -43,7 +78,7 @@ sys.post('/createAdmin', [check('email').notEmpty().isEmail().normalizeEmail(), 
             var tokgen = uidgen.generateSync(); //generate a token for the user
             var id = Math.floor(Math.random() * 1000000 + 1);
             createAdmin(db, ip, req.body.pnumber, req.body.email, { firstname: req.body.firstname, lastname: req.body.lastname }, tokgen, id).then(i => {
-                res.json(i.toString())
+                res.json("status": 201, i.toString())
             })
         } else {
             throw new Error("You do not have the credentials for this action");
@@ -53,6 +88,7 @@ sys.post('/createAdmin', [check('email').notEmpty().isEmail().normalizeEmail(), 
 
 /**
  * @api {post} /api/users/createMod
+ * @apiVersion 1.0.0
  * @apiName Create Mod
  * @apiGroup User
  *
@@ -62,7 +98,7 @@ sys.post('/createAdmin', [check('email').notEmpty().isEmail().normalizeEmail(), 
  * @apiParam {string} pnumber The users phone number
  * @apiParam {string} token The token of the executor of the request
  *
- * @apiSuccess {json} user The user that is created
+ * @apiSuccess (Success 201) {json} user The user that is created
  */
 sys.post('/createMod', [check('email').notEmpty().isEmail().normalizeEmail(), check('firstname').notEmpty().isLength({ min: 3 }).trim().escape().isString(), check('lastname').notEmpty().isString().isLength({ min: 3 }).trim().escape(), check('pnumber').notEmpty().isString(), check('token').notEmpty().isString()], (req, res, next) => {
     var db = opendb("user");
@@ -72,7 +108,7 @@ sys.post('/createMod', [check('email').notEmpty().isEmail().normalizeEmail(), ch
             var tokgen = uidgen.generateSync(); //generate a token for the user
             var id = Math.floor(Math.random() * 1000000 + 1);
             createMod(db, ip, req.body.pnumber, req.body.email, { firstname: req.body.firstname, lastname: req.body.lastname }, tokgen, id).then(i => {
-                res.json(i.toString())
+                res.json({ "status": 201, i.toString() })
             })
         } else {
             throw new Error("You do not have the credentials for this action");
@@ -82,20 +118,21 @@ sys.post('/createMod', [check('email').notEmpty().isEmail().normalizeEmail(), ch
 
 /**
  * @api {get} /api/users/:id
+ * @apiVersion 1.0.0
  * @apiName Retrieve User
  * @apiGroup User
  *
  * @apiParam {int} id The users ID to retrieve
  * @apiParam {string} token The token of the executor of the request
  *
- * @apiSuccess {User} user The user that is retrieved
+ * @apiSuccess (Success 201) {User} user The user that is retrieved
  */
 sys.get('/:id', check('token').notEmpty(), (req, res, next) => {
     apicatcher(validationResult, req);
     var db = opendb("user");
     retrieveuser(db, req.params.id).then(u => {
         if (u.token !== req.body.token) throw new Error("Credentials Invalid")
-        res.json(u.toString())
+        res.json({ "status": 201, u.toString() })
     }).catch(e => {
         console.error(e);
         next(e);
@@ -104,39 +141,8 @@ sys.get('/:id', check('token').notEmpty(), (req, res, next) => {
 })
 
 /**
- * @api {post} /api/users/signup
- * @apiName Create User
- * @apiGroup User
- *
- * @apiParam {string} email The users email
- * @apiParam {string} firstname The users firstname
- * @apiParam {string} lastname The users lastname
- * @apiParam {string} pnumber The users phone number
- *
- * @apiSuccess {json} user The user that is created
- */
-sys.post('/signup', [check('email').notEmpty().isEmail().normalizeEmail(), check('firstname').notEmpty().isLength({ min: 3 }).trim().escape().isString(), check('lastname').notEmpty().isString().isLength({ min: 3 }).trim().escape(), check('pnumber').notEmpty().isString()], (req, res, next) => {
-    if (!(req.body.email && req.body.pnumber && req.body.firstname && req.body.lastname)) throw new APIError("You are missing one or more fields", 400, "body", null);
-     //get the validation result and see if it passed the tests
-    isPN(req.body.pnumber);//check if phone number is all gucci
-    apicatcher(validationResult, req)
-    var tokgen = uidgen.generateSync(); //generate a token for the user
-    var id = Math.floor(Math.random() * 1000000 + 1);
-    var db = opendb("user");
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress; //the ip of the user
-    try {
-        signup(db, ip, req.body.pnumber, req.body.email, { firstname: req.body.firstname, lastname: req.body.lastname }, tokgen, id).then(u => { //send to the signup function
-            res.json(u.toString()) //return the newly created user object
-        });
-        return; //end the function
-    } catch (e) {
-        next(e);
-    }
-    db.close(); //close the database
-});
-
-/**
  * @api {post} /api/users/:id/update
+ * @apiVersion 1.0.0
  * @apiName Update User
  * @apiGroup User
  *
@@ -147,7 +153,7 @@ sys.post('/signup', [check('email').notEmpty().isEmail().normalizeEmail(), check
  * @apiParam {string} pnumber The users phone number
  * @apiParam {string} token The token of the executor of the request
  *
- * @apiSuccess {json} user The user that is updated with the new Data
+ * @apiSuccess (Success 201) {json} user The user that is updated with the new Data
  */
 sys.post('/:id/update', [check('email').notEmpty().isEmail().normalizeEmail(), check('firstname').notEmpty().isLength({ min: 3 }).trim().escape().isString(), check('lastname').notEmpty().isString().isLength({ min: 3 }).trim().escape(), check('pnumber').notEmpty().isString(), check('token').notEmpty().isString()], (req, res, next) => {
     if (!(req.body.firstname || req.body.lastname || req.body.email || req.body.pnumber)) {
@@ -163,7 +169,7 @@ sys.post('/:id/update', [check('email').notEmpty().isEmail().normalizeEmail(), c
         u.lastname = req.body.lastname.trim() || u.lastname;
         u.email = req.body.email.trim() || u.email;
         updateuser(db, u).then(u => {
-            res.json(u.toString());
+            res.json({ "status": 201, u.toString() });
         })
     }).catch(e => { next(e); })
 })

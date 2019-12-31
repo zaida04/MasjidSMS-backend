@@ -1,17 +1,20 @@
-# Masjid-AnNoor-Timing-API
-## The API/Backend for Masjid An-Noor's SMS Generating application for Prayer Times and events.
+# Masjid An-Noor API
+## The API/Backend for Masjid An-Noor's SMSList & prayer timing generating application
 
-Summary: **API returns data in JSON and works with a token system for differentiating admin and regular user accounts.**
+**Summary: A token and ID based authentication system with twilio as the SMS API**
 
-Long Version:
-- User System (Works on a token system & session system)
-- SMS Maillist 
-- Custom messages for Events or Corrections
-- Rate Limits
+**How to Install**
+```
+git clone https://github.com/zaida04/Masjid-AnNoor-Timing-frontend.git
+cd Masjid-AnNoor-Timing-frontend/src
+npm install
+node index.js
+```
 
-User Abilities:
-- Signup for SMS Maillist
-- View PDF/Image of prayer timings
+Features:
+- smslist (creation and deletion)
+- userbase (creation and updating)
+- all outputs in JSON
+- send texts to smslist
 
-Admin:
- - Create SMS Maillist
+**Still building**

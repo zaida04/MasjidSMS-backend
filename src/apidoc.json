@@ -1,7 +1,11 @@
 {
-  "name": "Masjid An-Noor APi",
+  "name": "Masjid An-Noor API",
   "version": "1.0.0",
-  "description": "A local API for Masjid An-Noor",
-  "title": "Masjid An-Noor",
-  "url": "https://github.com/zaida04/Masjid-AnNoor-Timing-API"
+  "description": "",
+  "title": "Masjid An-Noor API",
+  "url": "",
+  "header": {
+    "title": "Introduction",
+    "filename": "README.md"
+  }
 }

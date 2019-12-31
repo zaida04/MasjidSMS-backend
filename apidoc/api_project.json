@@ -1,0 +1,20 @@
+{
+  "name": "Masjid An-Noor API",
+  "version": "1.0.0",
+  "description": "",
+  "title": "Masjid An-Noor API",
+  "url": "",
+  "header": {
+    "title": "Introduction",
+    "content": "<h1>Masjid An-Noor API</h1>\n<h2>The API/Backend for Masjid An-Noor's SMSList &amp; prayer timing generating application</h2>\n<p><strong>Summary: A token and ID based authentication system with twilio as the SMS API</strong></p>\n<p><strong>How to Install</strong></p>\n<pre class=\"prettyprint\">git clone https://github.com/zaida04/Masjid-AnNoor-Timing-frontend.git\ncd Masjid-AnNoor-Timing-frontend/src\nnpm install\nnode index.js\n</code></pre>\n<p>Features:</p>\n<ul>\n<li>smslist (creation and deletion)</li>\n<li>userbase (creation and updating)</li>\n<li>all outputs in JSON</li>\n<li>send texts to smslist</li>\n</ul>\n<p><strong>Still building</strong></p>\n"
+  },
+  "sampleUrl": false,
+  "defaultVersion": "0.0.0",
+  "apidoc": "0.3.0",
+  "generator": {
+    "name": "apidoc",
+    "time": "2019-12-31T17:40:17.579Z",
+    "url": "http://apidocjs.com",
+    "version": "0.19.1"
+  }
+}
