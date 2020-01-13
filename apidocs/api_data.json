@@ -1,4 +1,4 @@
-define({ "api": [
+[
   {
     "type": "post",
     "url": "/api/sms/smslist/:name/add",
@@ -20,8 +20,29 @@ define({ "api": [
             "group": "Parameter",
             "type": "string",
             "optional": false,
-            "field": "id",
-            "description": "<p>Used to search up the person</p>"
+            "field": "firstname",
+            "description": "<p>Firstname of person</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "lastname",
+            "description": "<p>lastname of person</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email of person</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "pnumber",
+            "description": "<p>pnumber of person</p>"
           }
         ]
       }
@@ -86,6 +107,101 @@ define({ "api": [
     "groupTitle": "SMSlist"
   },
   {
+    "type": "get",
+    "url": "/api/sms/smslist/embed/:smslist",
+    "title": "",
+    "version": "1.0.0",
+    "name": "Endpoint_to_check_if_smslist_exists_for_embed_only",
+    "group": "SMSlist",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "response",
+            "description": "<p>A response</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/Routers/api/SMS/smslist.js",
+    "groupTitle": "SMSlist"
+  },
+  {
+    "type": "get",
+    "url": "/api/sms/smslist/smslists",
+    "title": "",
+    "version": "1.0.0",
+    "name": "Retrieve_list_of_SMSLists",
+    "group": "SMSlist",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Used to authenticate user</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "response",
+            "description": "<p>A response</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/Routers/api/SMS/smslist.js",
+    "groupTitle": "SMSlist"
+  },
+  {
+    "type": "get",
+    "url": "/api/sms/smslist/:smslist/users",
+    "title": "",
+    "version": "1.0.0",
+    "name": "Retrieve_list_of_users_in_SMSLists",
+    "group": "SMSlist",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Used to authenticate user</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "json",
+            "optional": false,
+            "field": "response",
+            "description": "<p>A response</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/Routers/api/SMS/smslist.js",
+    "groupTitle": "SMSlist"
+  },
+  {
     "type": "post",
     "url": "/api/sms/smslist/:name/sendText",
     "title": "",
@@ -121,9 +237,9 @@ define({ "api": [
     },
     "success": {
       "fields": {
-        "Success 201": [
+        "Success 200": [
           {
-            "group": "Success 201",
+            "group": "Success 200",
             "type": "json",
             "optional": false,
             "field": "response",
@@ -164,13 +280,13 @@ define({ "api": [
     },
     "success": {
       "fields": {
-        "Success 201": [
+        "Success 200": [
           {
-            "group": "Success 201",
+            "group": "Success 200",
             "type": "json",
             "optional": false,
             "field": "response",
-            "description": "<p>A response</p>"
+            "description": "<p>Successful deletion</p>"
           }
         ]
       }
@@ -476,5 +592,48 @@ define({ "api": [
     },
     "filename": "src/Routers/api/UserSys/sys.js",
     "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/api/users/login",
+    "title": "",
+    "version": "1.0.0",
+    "name": "login_User",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "email",
+            "description": "<p>The users email</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "password",
+            "description": "<p>The users password</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 201": [
+          {
+            "group": "Success 201",
+            "type": "json",
+            "optional": false,
+            "field": "user",
+            "description": "<p>The user that is created</p>"
+          }
+        ]
+      }
+    },
+    "filename": "src/Routers/api/UserSys/sys.js",
+    "groupTitle": "User"
   }
-] });
+]

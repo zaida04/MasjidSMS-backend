@@ -2,12 +2,14 @@ const express = require('express'); //Web Framework
 var app = express();
 var bodyParser = require('body-parser')
 var CFonts = require('cfonts');
+var cors = require('cors')
 var port = 80;
 var helmet = require('helmet'); //Security for Express
 //Library Declarations
 
 //Controller
 var api = require('./Routers/api/api.js');
+app.use(cors())
 app.use(helmet());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -18,7 +20,6 @@ app.use('/api', api);//Router
 //ERROR HANDLER
 app.use(function (err, req, res, next) {
     if (err) {
-        if(err.status) res.status(err.status)
         res.json({
             "status": err.status || 400,
             "code": err.code,
@@ -36,7 +37,7 @@ app.use(function (err, req, res, next) {
 
 //404 handler
 app.use((req, res, next) => {
-    res.status('404').json({
+    res.status(404).json({
         "status": 404,
         "error": "404, page not found",
         "url": req.originalUrl
