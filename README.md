@@ -1,4 +1,5 @@
 # Masjid An-Noor API
+
 ## The API/Backend for Masjid An-Noor's SMSList & prayer timing generating application
 
 **Summary: A token and ID based authentication system with twilio as the SMS API**
