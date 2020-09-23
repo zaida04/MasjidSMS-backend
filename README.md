@@ -1,3 +1,5 @@
+> ## :warning: Howdy! This is an old repo of mine, dated over 9 months ago last updated. Since then, it has not been updated package-wise and code wise.
+
 # Masjid An-Noor API
 
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/zaida04/MasjidSMS-backend?style=for-the-badge)![David](https://img.shields.io/david/zaida04/MasjidSMS-backend?style=for-the-badge)
